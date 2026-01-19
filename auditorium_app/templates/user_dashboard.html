@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Welcome, {{ user.username }}</h3>
+<a href="{% url 'book_auditorium' %}" class="btn btn-primary mb-3">Book Auditorium</a>
+<a href="{% url 'view_my_bookings' %}" class="btn btn-secondary mb-3">My Bookings</a>
+
+<h5>Available Auditoriums</h5>
+<table class="table table-bordered">
+  <thead>
+    <tr><th>Name</th><th>Location</th><th>Capacity</th><th>Rent/hr</th></tr>
+  </thead>
+  <tbody>
+    {% for aud in auditoriums %}
+    <tr>
+      <td>{{ aud.name }}</td>
+      <td>{{ aud.location }}</td>
+      <td>{{ aud.capacity }}</td>
+      <td>{{ aud.rent_per_hour }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4">No auditoriums available.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>All Bookings (Admin View)</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>User</th><th>Auditorium</th><th>Date</th><th>Time</th><th>Status</th><th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for booking in bookings %}
+    <tr>
+      <td>{{ booking.user.username }}</td>
+      <td>{{ booking.auditorium.name }}</td>
+      <td>{{ booking.date }}</td>
+      <td>{{ booking.start_time }} - {{ booking.end_time }}</td>
+      <td>{{ booking.status }}</td>
+      <td>
+        {% if booking.status != 'Confirmed' %}
+        <a href="{% url 'confirm_booking' booking.id %}" class="btn btn-sm btn-success">Confirm</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6">No bookings yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

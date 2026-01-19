@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">My Bookings</h2>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Auditorium</th>
+                <th>Date</th>
+                <th>Start - End Time</th>
+                <th>Duration</th>
+                <th>Total Cost</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.auditorium.name }}</td>
+                <td>{{ booking.date|date:"d M Y" }}</td>
+                <td>{{ booking.start_time|time:"h:i A" }} - {{ booking.end_time|time:"h:i A" }}</td>
+                <td>
+                    {% with h=booking.duration_h_m.0 m=booking.duration_h_m.1 %}
+                        {{ h }}h {{ m }}m
+                    {% endwith %}
+                </td>
+                <td>₹{{ booking.total_cost }}</td>
+                <td>{{ booking.status }}</td>
+                <td>
+                    <a href="{% url 'edit_booking' booking.id %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'delete_booking' booking.id %}" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7" class="text-center">No bookings found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

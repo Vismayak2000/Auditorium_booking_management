@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h3>📅 Auditorium Booking Calendar</h3>
+
+  <form method="get" class="mb-3">
+    <div class="row">
+      <div class="col-md-4">
+        <select name="auditorium" class="form-control" onchange="this.form.submit()">
+          <option value="">-- Select Auditorium --</option>
+          {% for a in auditoriums %}
+            <option value="{{ a.id }}" {% if a.id == selected_auditorium_id %}selected{% endif %}>{{ a.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </form>
+
+  {% if selected_auditorium_id %}
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <a href="?auditorium={{ selected_auditorium_id }}&month={{ prev_month }}&year={{ prev_year }}" class="btn btn-outline-primary btn-sm">⬅ Prev</a>
+      <h4>{{ month_name }} {{ year }}</h4>
+      <a href="?auditorium={{ selected_auditorium_id }}&month={{ next_month }}&year={{ next_year }}" class="btn btn-outline-primary btn-sm">Next ➡</a>
+    </div>
+
+    <table class="table table-bordered text-center">
+      <thead class="table-light">
+        <tr>
+          {% for day in day_names %}
+            <th>{{ day }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for week in month_days %}
+          <tr>
+            {% for d in week %}
+              {% if d.month != month %}
+                <td class="bg-light text-muted">{{ d.day }}</td>
+              {% elif d in booked_dates %}
+                <td class="bg-danger text-white">
+                  <strong>{{ d.day }}</strong><br>
+                  <small>Booked</small>
+                </td>
+              {% elif d < today %}
+                <td class="text-muted">{{ d.day }}</td>
+              {% else %}
+                <td class="bg-success-subtle">{{ d.day }}</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="mt-3 text-muted">Please select an auditorium to view its bookings.</p>
+  {% endif %}
+</div>
+
+<style>
+.table td {
+  height: 90px;
+  vertical-align: middle;
+}
+.bg-success-subtle {
+  background-color: #e7f6e7 !important;
+}
+</style>
+{% endblock %}
